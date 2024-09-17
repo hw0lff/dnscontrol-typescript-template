@@ -1,0 +1,12 @@
+{
+    "none": { "TYPE": "NONE" },
+    "zone-check": {
+        "TYPE": "BIND",
+        "directory": "zone-cache"
+    },
+    "inwx-env": {
+        "TYPE": "INWX",
+        "username": "$INWX_USERNAME",
+        "password": "$INWX_PASSWORD"
+    }
+}

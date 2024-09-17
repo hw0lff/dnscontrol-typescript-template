@@ -1,0 +1,5 @@
+/zone-cache
+/output
+/node_modules
+/dist
+/load-creds.sh
