@@ -18,7 +18,7 @@ _check-zones-dir    := "zone-cache"
 _ctl                := "dnscontrol"
 
 _log_level          := "-v log_level=" + env_var_or_default("DNS_LOG", "info")
-_conf-js            := "output/webpack/dnsconfig.js"
+_conf-js            := "output/esbuild/dnsconfig.js"
 _creds-json         := "src/creds.json"
 _creds              := " --creds " + _creds-json
 _conf               := " --config " + _conf-js
@@ -37,7 +37,7 @@ _env-dev-noprovider := "-v log_level=" + env_var_or_default("DNS_LOG", "off") + 
 _check_setup:
     @bash -c 'f=$(type dnscontrol)'
     @bash -c 'f=$(type named-checkzone jq python3)'
-    @bash -c 'f=$(type tsc webpack pretty-quick prettier)'
+    @bash -c 'f=$(type tsc esbuild pretty-quick prettier)'
 
 # run everything. you should commit afterwards
 full-run: fmt build check dns-deploy
@@ -145,14 +145,10 @@ setup:
 
 # run all typescript build steps
 [group('typescript')]
-build: tsc pack
+build: _check_setup tsc
+    node build.mjs
 
 # compile typescript
 [group('typescript')]
 tsc *args='': _check_setup
     tsc {{args}}
-
-# bundle typescript to dnsconfig.js
-[group('typescript')]
-pack: _check_setup
-    webpack --fail-on-warnings --stats=errors-warnings
