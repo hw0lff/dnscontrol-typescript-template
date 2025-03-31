@@ -25,10 +25,8 @@ _conf               := " --config " + _conf-js
 _cc                 := _conf + _creds
 
 _check              := "check" + _conf
-_push               := "push --full" + _cc
-_ppush              := "ppush --full" + _cc
-_preview            := "preview --full" + _cc
-_ppreview           := "ppreview --full" + _cc
+_push               := "push" + _cc
+_preview            := "preview" + _cc
 
 _env-prod           := _log_level + " -v environment=prod " + "--providers " + _provider_credkey
 _env-dev-provider   := _log_level + " -v environment=test " + "--providers none,zone-check "
@@ -49,7 +47,7 @@ dns-deploy: check dns-preview _dns-push
 # preview changes to DNS provider
 [group('dns')]
 dns-preview: build
-    {{_ctl}} {{_ppreview}} {{_env-prod}}
+    {{_ctl}} {{_preview}} {{_env-prod}}
 
 # get zones from the DNS provider in $fmt format
 [group('dns')]
@@ -70,7 +68,7 @@ dns-import-zones credkey=_provider_credkey *args='': _check_setup
 [confirm("Do you want to push the changes?")]
 [group('dns')]
 _dns-push: # no dependencies here in case of manual intervention
-    {{_ctl}} {{_ppush}} {{_env-prod}}
+    {{_ctl}} {{_push}} {{_env-prod}}
 
 
 # run all checks
